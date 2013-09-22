@@ -1,0 +1,324 @@
+$canvasWidth: 900px
+$canvasHeight: 600px
+$toolsWidth: 75px
+$topBarHeight: 44px
+$canvasMarginTop: 25px
+$canvasMarginLeft: 25px
+$fontSize: 14px
+$fontSizeBig: 18px
+$fontSizeLarge: 24px
+$btnHeight: 85px
+$titleFontSize: 22px
+$dialogWidth: 290px
+$presenterListHeight: 160px
+$btnMarginSmallBtn: 40px
+$borderRadius: 5px
+$canvasX: $toolsWidth + $canvasMarginLeft 
+$canvasY: $topBarHeight + $canvasMarginTop
+$canvasIndex: 100
+$docsDialogWidth: $dialogWidth + 100px
+
+@import mixins
+
+body
+  margin: 0
+  // font-size: $fontSize
+  font-family: Arial
+
+#login-view
+  clear: both
+
+#prev
+  background: url('../img/icons/icon-prepage.png')
+  left: $toolsWidth
+
+#next
+  background: url('../img/icons/icon-nextpage.png')
+  // left: $toolsWidth + $canvasWidth
+  right: 0
+
+#prev, #next
+  background-size: 69px 69px
+  z-index: $canvasIndex + 1
+  position: absolute
+  width: 69px
+  height: 69px
+  cursor: pointer
+  top: $topBarHeight + $canvasMarginTop + $canvasHeight/2 - 34px
+
+#alert
+  position: absolute
+  z-index: $canvasIndex + 100
+  left: 50% 
+  top: 40% 
+  background: #fff
+  padding: 20px
+  font-size: $fontSizeBig
+  border-radius: 10px
+  width: $dialogWidth
+  margin-left: -$dialogWidth/2
+  display: none
+  .message
+  .close, .cancel, .accept
+    font-size: $fontSize
+    margin-right: 10px
+    cursor: pointer
+  .close
+    float: right
+  .cancel
+    float: left
+
+.small_btn
+  background: #ef725c
+  text-align: center
+
+#exit_meeting
+  // float: right
+  position: absolute
+  right: 10px
+  height: 44px
+  top: -1px
+  // margin: -43px 0
+  padding: 10px
+  .exit_meeting
+    float: right
+    margin: 0 10px 0 0
+    font-size: $fontSize + 2px
+    background: rgb(0,123,103)
+    padding: 3px
+    cursor: pointer
+
+#enterPage
+  #top_bar
+    height: $topBarHeight - 20px
+    padding: 8px 0 12px
+    width: 100%  //$canvasX * 2 + $canvasWidth - $toolsWidth 
+    font-weight: bold
+    background: rgb(23,173,147)
+    text-align: center
+    font-size: $titleFontSize
+    color: white
+  #tools
+    position: absolute
+    height: 724px 
+    z-index: $canvasIndex + 1
+    top: $topBarHeight
+    left: 0px
+    width: $toolsWidth
+    background: rgb(47,46,46)
+    color: #fff
+    font-size: $fontSize
+    .presenting
+      margin-top: 50px
+      .ctrl-buttons
+        // margin-left: -40px
+    .color, .size, .btn, .small_btn, .set_presenter, .refuse_presenter, .set_presenter2, .refuse_presenter2
+      cursor: pointer
+    .color, .size
+      float: left
+    .small_btn, .btn
+      text-align: center
+    .small_btn
+      margin: 5px
+      padding: 3px
+    .btn
+      margin: 0px
+      padding: 10px 0 0 0
+      height: $btnHeight - 10px
+      .icon
+        margin: 0 0 10px 26px
+    #begin_hammer
+      margin-top: $btnMarginSmallBtn
+    .user
+      font-size: $fontSize + 2px
+    #draw_style, #presenters, #docs_dialog
+      z-index: $canvasIndex + 2
+      display: none
+      position: absolute
+      left: $canvasX
+      border-radius: $borderRadius
+    #presenter, #doc_dialog
+      text-align: center
+      margin: 19px 10px
+      padding-bottom: 10px
+    #presenters
+      width: $dialogWidth
+      color: #000
+      background: rgb(247,245,240)
+      top: $topBarHeight + $btnHeight * 3 
+      .nav-top
+        width: $dialogWidth
+        .btn-word
+          background: rgb(229,229,229)
+          cursor: pointer
+          padding: 2px 5px
+          color: #000
+        .ok
+          margin-left: 50px
+      .caret
+        border-right: 20px solid rgb(247,245,240)
+    #docs_dialog
+      width: $docsDialogWidth
+      background: #585858
+      top: $topBarHeight + $btnHeight * 2
+      color: white
+      .ok-icon
+        margin: 8px 0 0 30px
+      .nav-top
+        width: $docsDialogWidth
+        color: rgb(239,114,92)
+        border-bottom: 1px white solid
+        .btn-word
+          cursor: pointer
+          padding: 5px 10px
+        .ok
+          margin-left: 200px
+      .caret
+        border-right: 20px solid #585858
+    #presenters, #docs_dialog
+      box-shadow: 0 0 6px #111111
+      .caret
+        top: 170px
+        @include caret
+        left: -20px
+      .nav-top, .search
+        height: $topBarHeight
+      .current_presenter
+        height: $topBarHeight + 20px
+        border-radius: 0 0 $borderRadius $borderRadius
+        background: rgb(235,238,228)
+        p 
+          padding: 10px
+        .user
+          margin: -20px 10px
+      .nav-top
+        font-size: $fontSize + 2px
+        background: rgb(88,88,88)
+        border-radius: $borderRadius $borderRadius  0 0
+        div
+          float: left
+          margin-top: 10px
+        .title
+          margin: 15px 0 0 60px
+          color: white
+        .cancel
+          margin-left: 15px
+      .search
+        border-bottom: 1px #999 solid
+        .search-png
+          float: right
+          margin: -35px 30px 0 0
+        input
+          width: $dialogWidth * 0.8 
+          margin: 5px 0 5px 15px
+          height: $topBarHeight/3 * 2 
+          border-radius: $fontSizeLarge
+          border: none
+          font-size: $fontSize
+          padding: 2px 10px
+      #presenter_list, #doc_list
+        overflow-y: auto
+        overflow-x: hidden
+        li
+          border-bottom: 1px #999 solid
+          padding-bottom: 10px
+          .presenter
+            .avatar
+              margin: 5px 10px
+              float: left
+      #presenter_list
+        height: $presenterListHeight
+        margin: 25px 0 0 0
+        li
+          height: $topBarHeight
+          margin: 5px 20px  0 20px
+      #doc_list
+        height: 260px
+        li
+          margin: 20px 0 0px 20px
+          height: 30px
+      .icons
+        float: right
+        margin: -20px 20px
+        width: 50px
+        .set_presenter, .set_presenter2
+          float: right
+        .refuse_presenter, .refuse_presenter2
+          float: left
+        .refuse_presenter
+          display: none
+          // margin: 0 20px 0 0
+    #draw_style
+      padding: 20px 8px
+      font-size: $fontSizeBig
+      background: rgb(60,60,60) 
+      width: $dialogWidth * 0.8
+      top: $topBarHeight + $btnHeight/2
+      .caret
+        @include caret
+        left: -20px
+        top: 120px
+        border-right: 20px solid rgb(60,60,60)
+      .line
+        clear: both
+        margin: 0 0 0 10px
+        padding: 0 0 5px 0
+        border-bottom: 1px #fff solid
+      .size
+        margin: 12px
+        text-indent: -9999px
+      .color 
+        width: $dialogWidth/6
+        height: $dialogWidth/6
+        padding: 2px 3px
+        margin: 8px
+        border-radius: 5px
+        text-indent: -9999px
+
+#saved_png, canvas, #base_png
+  width: $canvasWidth
+  height: $canvasHeight
+
+canvas
+  display: none
+  z-index: $canvasIndex
+  left: $canvasX
+  top: $canvasY
+
+#pngs
+  height: $canvasHeight
+  width: $canvasWidth
+  margin: $canvasMarginTop 0 0 $canvasX
+  #saved_png
+    z-index: 1
+  #base_png
+    z-index: 0
+
+#control_buttons
+  display: inline
+
+#buttons
+  text-align: center
+  position: relative
+  margin: 10px auto
+  button
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif
+    z-index: $canvasIndex + 2
+    font-size: $fontSize 
+    margin: 0
+
+#modal
+  position: fixed
+  top: $topBarHeight
+  right: 0
+  bottom: 0px
+  left: 0px
+  z-index: $canvasIndex + 1
+  opacity: .5 
+  background-color: rgba(0, 0, 0, 0.5)
+  display: none
+
+#saved_png, canvas, #base_png, #saved_png img
+  position: absolute
+  background-size: 100% 100%
+

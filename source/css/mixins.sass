@@ -1,0 +1,52 @@
+@import variables
+
+@mixin border_radius($value: $border_radius)
+  -moz-border-radius: $value
+  -webkit-border-radius: $value
+  border-radius: $value
+
+@mixin box_shadow($shadow: 5px, $color: #2fad91)
+  box-shadow: 0 0 $shadow 0 $color
+  -moz-box-shadow: 0 0 $shadow 0 $color
+  -webkit-box-shadow: 0 0 $shadow 0 $color
+  -o-box-shadow: 0 0 $shadow 0 $color
+
+@mixin inset_box_shadow($shadow: 2px, $color: #2fad91)
+  box-shadow: 0 0 $shadow 0 $color inset
+  -moz-box-shadow: 0 0 $shadow 0 $color inset
+  -webkit-box-shadow: 0 0 $shadow 0 $color inset
+  -o-box-shadow: 0 0 $shadow 0 $color inset
+
+@mixin opacity($value: .4)
+  opacity: $value
+  -moz-opacity: $value
+  filter: alpha(opacity = $value * 100)
+  background: rgba(0,0,0,$value)
+
+@mixin caret($value: 15px)
+  display: inline-block
+  width: 0
+  height: 0
+  vertical-align: top
+  border-top: $value solid transparent
+  border-bottom: $value solid transparent
+  content: ""
+  position: absolute
+
+@mixin center($size)
+  position: absolute
+  top: 50%
+  left: 50%
+  margin-left: $size
+  margin-top: $size
+
+@mixin input($border_color: '#eee', $radius: $border_radius)
+  @include border-radius($radius)
+  @include inset_box_shadow
+  border: 1px $border_color solid
+
+@mixin button($border_color: '#eee', $radius: $middle_border_radius)
+  border: 1px $border_color solid
+  @include border-radius($radius)
+  @include inset_box_shadow
+

@@ -1,0 +1,337 @@
+@import variables
+@import mixins
+
+
+*
+  -webkit-user-select: none
+     
+html, body
+  margin: 0
+  padding: 0
+  -webkit-touch-callout: none
+  -webkit-text-size-adjust: none 
+  -webkit-user-select: none
+  -webkit-highlight: none
+  -webkit-tap-highlight-color: rgba(0,0,0,0)
+
+body
+  background-color: $main_bg_color
+  font-family: 'Helvetica', Arial, Sans-serif
+
+input, textarea
+  -webkit-user-select: text
+
+#loading
+  background: url(../img/icons/loading.gif)
+  @include center(-16px)
+  display: none
+  width: 32px
+  height: 32px
+
+.main
+  top: $page_title_height
+  left: 0
+  right: 0
+  bottom: 0
+  position: absolute
+
+*:focus
+  outline: none
+
+#page-title
+  position: fixed
+  background: $main_color
+  color: white
+  text-align: center
+  width: 100%
+  height: $page_title_height
+  top: 0
+  left: 0
+  z-index: 1000
+  h1 
+    font-size: $title_font_size + 2px
+
+#content
+  position: absolute
+  top: $page_title_height
+  left: $menu_width + 10px
+  right: 10px
+  bottom: 0
+  overflow: auto
+
+ul 
+  list-style: none
+  padding: 0
+  margin: 0
+
+a 
+  text-decoration: none
+
+/* style for MenuView */
+#menu-view 
+  width: $menu_width
+  height: $menu_height
+  position: fixed
+  left: 0
+  color: rgb(135,135,135)
+  top: $page_title_height
+  background-color: #000000
+  ul 
+    text-align: center
+    padding-top: 30px
+    li
+      cursor: pointer
+      margin-bottom: 40px
+      &#profile 
+        bottom: 0
+        left: 28px
+  a 
+    color: rgb(124, 124, 124)
+    font-size: 18px
+    margin-top: 5px
+    display: block
+
+.menu-events, 
+.menu-firsts,
+.menu-view-docs-icon
+  display: inline-block
+  width: 40px
+  height: 40px
+  background-repeat: no-repeat 
+  background-size: 40px, 40px
+
+.menu-events
+  background-image: url('../img/icons/icon-new-events-open.png')
+
+#events a
+  color: white
+
+.menu-firsts
+  background-image: url('../img/icons/icon-history-events-close.png')
+
+.menu-view-docs-icon 
+  background-image: url('../img/icons/icon-doc-close.png')
+
+.profile-icon
+  display: inline-block
+  width: 48px
+  height: 48px
+  background-image: url('../img/icons/icon-avatar-close.png')
+  background-repeat: no-repeat 
+  background-size: 48px, 48px
+
+/*styles for LoginView and RegisterView*/
+#login-view, #register-view 
+  top: 0
+  right: 0
+  bottom: 0
+  left: 0
+  background-color: $main_bg_color
+  z-index: 1
+
+.login-view-dialog, .register-view-dialog 
+  width: $login_dialog_width
+  top: 50%
+  background: white
+  padding: 20px
+  left: 50%
+  position: absolute
+  margin: -$login_dialog_width/4 * 3 0 0 -170px
+  input
+    @include input
+    width: 90%
+    padding: 12px
+    height: 30px
+    font-size: 18px
+    border: 1px #eee solid
+    margin: 5px 0
+  div
+    text-align: center
+    margin-bottom: 25px
+    ul
+      display: inline-block
+
+.login-view-dialog-title, .register-view-dialog-title
+  font-size: 20pt
+  font-weight: bolder
+  color: rgb(110, 110, 110)
+
+.login-view-dialog-title-english, .register-view-dialog-title-english 
+  font-size: 12px
+  color: rgb(110, 110, 110)
+
+.login-view-dialog-logo, .register-view-dialog-logo
+  display: inline-block
+  width: $logo_size_login
+  height: $logo_size_login
+  background-image: url('../img/icons/icon.jpg')
+  background-size: $logo_size_login, $logo_size_login
+  @include border_radius
+  background-repeat: no-repeat
+
+.login-view-dialog-password, .register-view-dialog-password-confirmation 
+  border-bottom: 1px rgb(200, 200, 200) solid
+
+#login-view-submit, #register-view-submit
+  @include button
+  background-color: $main_color
+  width: 99%
+  height: 53px
+  font-size: 20px
+  color: white
+  border: none
+  cursor: pointer
+
+.login-view-login-register 
+  color: white
+  font-size: 20px
+  text-align: center
+  padding: 3%
+
+.login-view-dialog p span, .register-view-dialog p span 
+  cursor: pointer
+  height: 26px
+  padding: 2%
+  width: 30%
+  display: inline-block
+
+.login-view-login 
+  width: 15%
+  display: inline-block
+  background-color: rgb(200, 200, 200)
+
+
+.login-view-register 
+  width: 15%
+  display: inline-block
+  background-color: $main_color
+  margin-left: 10%
+
+.register-view-login 
+  width: 15%
+  display: inline-block
+  background-color: $main_color
+
+
+.register-view-register 
+  width: 15%
+  display: inline-block
+  background-color: rgb(200, 200, 200)
+  margin-left: 10%
+
+/*styles for ProfileView*/
+
+.profile-view 
+  font-size: 18px
+  color: rgb(40, 40, 40)
+
+.profile-view-dialog 
+  position: absolute
+  top: $top_bar_height
+  left: $menu_width
+  width: 200px
+  height: 100%
+  z-index: 2
+  background-color: $main_bg_color
+  display: none
+
+.profile-view-modal 
+  position: absolute
+  top: 0
+  right: 0
+  width: 100%
+  height: 100%
+  z-index: 1
+  @include opacity
+  display: none
+
+.profile-view-dialog header
+  background-color: rgb(235, 116, 86)
+  color: white
+  text-align: center
+  height: 40px
+
+.profile-view-title 
+  font-weight: bold
+  padding-top: 8px
+  display: block
+
+.profile-view-user-data 
+  padding: 30px
+  li 
+    padding: 5px
+    height: 30px
+    border-bottom: 1px rgb(210, 210, 210) solid
+  li:first-child 
+    margin-top: 32px
+  span 
+    display: inline-block
+    margin-right: 20px
+
+
+.profile-view-user-name,
+.profile-view-user-email
+
+  width: 21px
+  height: 21px
+  background-repeat: no-repeat
+  background-size: 21px, 21px 
+  vertical-align: middle
+
+.profile-view-user-name 
+  background-image: url('../img/icons/icon-user-name.png')
+
+.profile-view-user-email 
+  background-image: url('../img/icons/icon-user-email.png')
+
+#menu-view-logout 
+  border-bottom: none
+  background-color: rgb(235, 116, 86)
+  height: 20px
+  margin-top: 32px
+  text-align: center
+  cursor: pointer
+  a
+    color: white
+
+/*style for EventsView*/
+#events-view
+  .header
+    cursor: pointer
+    color: rgb(200, 200, 200)
+    border-top: 1px rgb(200, 200, 200) solid
+    border-bottom: 1px rgb(200, 200, 200) solid
+    margin-top: 0
+    margin-bottom: 0
+    font-weight: normal
+    padding: 2px 0 2px 15px
+.event-view
+  background: white
+  width: 95%
+  // height: 150px
+  margin: 10px 0
+  padding: 10px
+  display: inline-block
+  vertical-align: top
+  box-shadow: 1px 1px 1px rgb(200, 200, 200)
+  cursor: pointer
+  .icon 
+    width: 30px
+    height: 30px
+    cursor: pointer
+    background-image: url('../img/icons/icon-right-arrow-green-2.png')
+    background-repeat: no-repeat 
+    background-size: 30px, 30px
+    float: right
+    display: inline
+    margin-left: 30px
+  .month-day
+    margin: 0
+    color: $main_color 
+  .name 
+    margin: 5% 0 0 0
+    color: rgb(120, 120, 120)
+  #more
+    height: 25px
+    width: 100%
+    cursor: pointer
