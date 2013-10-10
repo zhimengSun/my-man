@@ -33,13 +33,11 @@ define [
  
     navFutureEvents: ->
       @toggleClickedMenu @$el.find('#events')
-      window.App.router.navigate '#',
-        trigger: true
+      window.App.router.home()
 
     navFirsts: ->
       @toggleClickedMenu @$el.find('#firsts')
-      window.App.router.navigate '#firsts',
-        trigger: true
+      window.App.router.firsts()
     
     userProfile: ->
       clickedImage = @$el.find('.profile-icon')
@@ -48,8 +46,7 @@ define [
       @profileView.openDialog()
       
     navLogin: ->
-      window.App.router.navigate '#login',
-        trigger: true
+      window.App.router.login()
     
     toggleClickedMenu: (clickedMenu)->
       if @clickedMenu
