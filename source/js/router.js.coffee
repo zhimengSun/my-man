@@ -7,12 +7,15 @@ define [
   'app/models/event'
   'app/models/user'
   'app/models/first'
+  'app/models/contact'
   'app/collections/events'
   'app/collections/firsts'
+  'app/collections/contacts'
   'app/views/events/events_view'
   'app/views/firsts/firsts_view'
+  'app/views/contacts/contacts_view'
   'canvas_draw'
-], (Backbone, $, MenuView,  Login, LoginView, Event, User, First, Events, Firsts, EventsView, FirstsView, EnterView, CanvasDraw)->
+], (Backbone, $, MenuView,  Login, LoginView, Event, User, First, Contact, Events, Firsts, Contacts, EventsView, FirstsView, ContactsView, CanvasDraw) ->
   
   class Router extends Backbone.Router
     
@@ -50,10 +53,8 @@ define [
       $('#yield').html(eventsView.el)
     
     contacts: ->
-      contacts = new Contacts()
-      contactsView = new ContactsView(collection: contacts)
+      contactsView = new ContactsView()
       @swap(contactsView)
-      contactsView.fetchContacts()
       $('#yield').html(contactsView.el)
 
     firsts: ->

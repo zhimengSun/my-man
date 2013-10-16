@@ -46,7 +46,7 @@ define [
         window.localStorage.setItem('userEmail', user.email) 
         $('#notice').empty()
         App.router.logged_in()
-        App.router.home(),
+        App.router.home()
       $('#loading').hide()
 
     navRegister: ->
