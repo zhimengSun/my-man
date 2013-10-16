@@ -49,6 +49,13 @@ define [
       eventsView.fetchEvents()
       $('#yield').html(eventsView.el)
     
+    contacts: ->
+      contacts = new Contacts()
+      contactsView = new ContactsView(collection: contacts)
+      @swap(contactsView)
+      contactsView.fetchContacts()
+      $('#yield').html(contactsView.el)
+
     firsts: ->
       firsts = new Firsts()
       firstsView = new FirstsView(collection: firsts)

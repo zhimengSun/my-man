@@ -30,11 +30,16 @@ define [
       'click #events': 'navFutureEvents'
       'click #firsts': 'navFirsts'
       'click #profile': 'userProfile'
+      'click #contacts': 'getContacts'
  
     navFutureEvents: ->
       @toggleClickedMenu @$el.find('#events')
       window.App.router.home()
 
+    getContacts: ->
+      @toggleClickedMenu @$el.find('#contacts')
+      window.App.router.contacts()
+    
     navFirsts: ->
       @toggleClickedMenu @$el.find('#firsts')
       window.App.router.firsts()
