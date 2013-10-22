@@ -6,10 +6,12 @@ define ['composite.view'
 
   class ContactsView extends CompositeView
     
-    id: 'events-view'
+    id: 'contacts-view'
     
     initialize: (options) ->
       @contacts = navigator.contacts
+      alert @contacts
+      alert typeof(@contacts)
       @indexTemplate = JST['app/templates/contacts/index']
       @$el.html @indexTemplate
       @listenTo(@collection, 'add', @addContact)
