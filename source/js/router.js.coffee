@@ -40,8 +40,12 @@ define [
       '': 'home'
       'firsts': 'firsts'
       'login': 'login'
-      
+     
+    hideLoading: ->
+      $('#loading').hide()   
+ 
     home: ->
+      hideLoading()
       $('.main').show()
       $('#page-title').show()
       menuView = new MenuView()
@@ -67,7 +71,7 @@ define [
     login: ->
       $('.main').hide()
       $('#page-title').hide()
-      $('#canvas2').hide()
+      # $('#canvas').hide()
       login = new Login()
       loginView = new LoginView(model: login)
       @swap loginView
