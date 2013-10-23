@@ -20,8 +20,11 @@ define [
   class Router extends Backbone.Router
     
     initialize: (options) ->
-      window.location.href = '#login' if !@logged_in()
-      # @login if !@logged_in()
+      # window.location.href = '#login' if !@logged_in()
+      if !@logged_in()
+        @login()
+      else
+        @home()
 
     swap: (newView)->  
       @currentView.leave() if @currentView && @currentView.leave
@@ -38,7 +41,7 @@ define [
       if token then true else false
 
     routes:
-      '': 'home'
+      '#': 'home'
       'firsts': 'firsts'
       'login': 'login'
      
@@ -46,7 +49,7 @@ define [
       $('#loading').hide()   
  
     home: ->
-      @hideLoading()
+      # @hideLoading()
       $('.main').show()
       $('#page-title').show()
       menuView = new MenuView()

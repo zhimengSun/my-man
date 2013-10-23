@@ -22,7 +22,7 @@ define ['composite.view',
       window.localStorage.removeItem('userId')
       @closeDialog()
       console.info 'logout'
-      window.location.href = '#login'
+      App.router.login() 
     
     openDialog: ->
       @$el.find('.profile-view-modal').show()

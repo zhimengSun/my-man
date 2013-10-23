@@ -22,7 +22,7 @@ define [
       @profileView = new ProfileView
         userData:
           name: '孙志萌'
-          email:App.currentUser.get('email')
+          email: App.currentUser.get('email') 
       @$el.find('ul').append @loggedMenuHtml
       $('body').append @profileView.el
 
