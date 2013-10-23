@@ -21,6 +21,7 @@ define [
     
     initialize: (options) ->
       window.location.href = '#login' if !@logged_in()
+      # @login if !@logged_in()
 
     swap: (newView)->  
       @currentView.leave() if @currentView && @currentView.leave
@@ -45,7 +46,7 @@ define [
       $('#loading').hide()   
  
     home: ->
-      hideLoading()
+      @hideLoading()
       $('.main').show()
       $('#page-title').show()
       menuView = new MenuView()
@@ -57,11 +58,13 @@ define [
       $('#yield').html(eventsView.el)
     
     contacts: ->
+      @hideLoading()
       contactsView = new ContactsView()
       @swap(contactsView)
       $('#yield').html(contactsView.el)
 
     firsts: ->
+      @hideLoading()
       firsts = new Firsts()
       firstsView = new FirstsView(collection: firsts)
       @swap(firstsView)
@@ -69,6 +72,7 @@ define [
       $('#yield').html(firstsView.el)
 
     login: ->
+      @hideLoading()
       $('.main').hide()
       $('#page-title').hide()
       # $('#canvas').hide()
