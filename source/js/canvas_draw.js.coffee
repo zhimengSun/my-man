@@ -2,17 +2,15 @@ define ['backbone','jquery'], (Backbone, $) ->
 
   class window.CanvasDraw
 
-    init: (e, stylesOpts) ->
+    constructor: (e, stylesOpts) ->
       @canvas = document.getElementById(e)
       @canvas.height = stylesOpts.height
       @canvas.width = stylesOpts.width
       @ctx = @canvas.getContext("2d")
-      @canvas.addEventListener('touchstart', @touchDraw, false)
-      @canvas.addEventListener('touchmove', @touchDraw, false)
       @canvas.addEventListener('touchend', @ended, false)
-      @canvas.addEventListener('mousedown', @dragDraw, false)
-      @canvas.addEventListener('mousemove', @dragDraw, false)
-      @canvas.addEventListener('mouseup', @dragDraw, false)
+      ['mouseup','mousedown','mousemove','touchstart','touchmove'].forEach (ename) =>
+        @canvas.addEventListener(ename, @dragDraw, false) if ename.match 'mouse'
+        @canvas.addEventListener(ename, @touchDraw, false) if ename.match 'touch'
       @current_dialog = '#draw_style'
 
     drawStyle: (canvasOpts) ->
@@ -47,7 +45,7 @@ define ['backbone','jquery'], (Backbone, $) ->
         type: 'post'
         data:
           token: currentUser.get('token')
-          doc_id: DocId
+          doc_id: currentDoc.id
           png: @canvas.toDataURL("image/png").replace('data:image/png;base64,','')
 
     touchDraw: (event) =>
@@ -108,7 +106,7 @@ define ['backbone','jquery'], (Backbone, $) ->
           # @saveToPng()
           @endSync()
           @ctx.closePath()
-        @publishData(position, type, DocId, @getStyle()) if window.isPaint
+        @publishData(position, type, currentDoc.id, @getStyle()) if window.isPaint
        
     beginSync: ->
       @sync = 
@@ -135,17 +133,17 @@ define ['backbone','jquery'], (Backbone, $) ->
           url: App.apiHost + '/delete_history'
           type: 'post'
           data:
-            id: DocId
+            id: currentDoc.id
             token: currentUser.get('token')
 
-    publishAction: (action, doc_id = DocId, user_id = currentUser.id) ->
+    publishAction: (action, doc_id = currentDoc.id, user_id = currentUser.id) ->
       if isPresenting or action is 'apply_presenter'
         faye.publish Channel,
           id: doc_id
           user_id: user_id
           dtype: action
 
-    publishData: (position, dtype, doc_id = DocId, draw_style = {}) ->
+    publishData: (position, dtype, doc_id = currentDoc.id, draw_style = {}) ->
       if isPresenting
         faye.publish Channel,
           id: doc_id
@@ -164,13 +162,17 @@ define ['backbone','jquery'], (Backbone, $) ->
     
     window.out_first_page = false
     window.out_last_page = false
+    
+    imagePath: ->
+      App.apiHost # request static sources directly
+      # cached image if have
 
     slidePage: (doc) ->
-      $('#base_png').attr('src', App.apiHost + doc.image_url)
+      $('#base_png').attr('src', @imagePath() + doc.image_url)
 
       historyPngs = ''
       $.each doc.history_pngs, (i, v) ->
-        historyPngs += '<img src="' + App.apiHost + v.replace('public','') + '" >'
+        historyPngs += '<img src="' + @imagePath() + v.replace('public','') + '" >'
 
       $('#saved_png').html(historyPngs)
       
@@ -205,9 +207,13 @@ define ['backbone','jquery'], (Backbone, $) ->
     
     hideSlideButton: (direction) ->
       $('#' + direction).hide()
+      $('#' + direction).css
+        'z-index': 110
 
     showSlideButton: (direction) ->
       $('#' + direction).show()
+      $('#' + direction).css
+        'z-index': 1000
     
     showAllSlideButton: ->
       @showSlideButton('next')
@@ -222,7 +228,7 @@ define ['backbone','jquery'], (Backbone, $) ->
       window.isDraw = false
       window.isPaint = false
       @ctx.closePath()
-      $('.ctrl-buttons').slideDown()
+      App.tool_helper.ctrlButtons().slideDown()
       @hideModal()
       # enter_view.current_menu = $($('#enterPage').find('.btn')[0])
       if isHost
@@ -252,7 +258,7 @@ define ['backbone','jquery'], (Backbone, $) ->
     
     stopPresenter: (presenterId = currentUser.id) ->
       window.isPresenting = false
-      $('.ctrl-buttons').slideUp()
+      App.tool_helper.ctrlButtons().slideUp()
       @showModal()
       $.ajax
         url: App.apiHost + '/set_presenter'
@@ -283,21 +289,17 @@ define ['backbone','jquery'], (Backbone, $) ->
         @hideHostNeedButtons()
         $('#presenters').hide()
       else
-        $('.ctrl-buttons').slideUp() 
+        App.tool_helper.ctrlButtons().slideUp() 
       window.isPresenting = false
       window.isDraw = false
       $('#canvas').show()
       @showModal()
     
     hideHostNeedButtons: ->
-      $('#begin_hammer').slideUp()
-      $('#toggleTool').slideUp()
-      $('#delete_history').slideUp()
+      App.tool_helper.commonPresentMenus().slideUp()
 
     showHostNeedButtons: ->
-      $('#begin_hammer').slideDown()
-      $('#toggleTool').slideDown()
-      $('#delete_history').slideDown()
+      App.tool_helper.commonPresentMenus().slideDown()
 
     publishPresenterTo: (presenter, dtype = 'change_presenter') ->
       faye.publish Channel,
@@ -348,23 +350,15 @@ define ['backbone','jquery'], (Backbone, $) ->
       else
         @showSlideButton('prev') if isPresenting
       @hideDrawStyle()
-      @resetAlert()
+      # @resetAlert()
       @hidePresenters()
       @hideDocsDialog()
       if isPresenting
         $("#modal").hide()
 
     alert: (content, title = '国信会议系统') ->
-      # $("#alert .message").html(title)
-      # $("#alert").show()
-      # $("#modal").show()
-      nsalert content, title
+      App.tool_helper.alert content, title
 
-    resetAlert: ->
-      $("#alert").html "
-                        <div class='message'></div>
-                        <div class='close'>关闭</div>
-                       "
     toggleModal: (dialog = '#draw_style') ->
       draw_style = $('#draw_style').css('display')
       presenters = $('#presenters').css('display')
@@ -393,7 +387,6 @@ define ['backbone','jquery'], (Backbone, $) ->
       currentMeeting.save
         patch: true
       currentDoc.set doc
-      window.DocId = doc.id
       image = App.apiHost + '/meeting_root/' + currentMeeting.id + '/doc_' + doc.id + '/1/1.jpg'
       $('#base_png').attr('src', image)
       @deleteHistory()
@@ -422,72 +415,6 @@ define ['backbone','jquery'], (Backbone, $) ->
       if dtype is 'user_join'
         presenters_view.collection.add user
       presenters_view.render()
-    
-    exitFullScreen: ->
-      window.App.full_screen = false
-      $('#full_screen').removeClass('no').addClass('yes')
-      $('#tools').show(1000)
-      $('#pngs').animate
-        height: "600px"
-        width: '900px'
-        left: '100px'
-        top: '69px'
-        background: 'transparent'
-        'z-index': 1
-      $('#prev').animate
-        left: '75px'
-      $('#next').animate
-        right: '0px'
-      $('#canvas').animate
-        'z-index': 100
-        left: '100px'
-        top: '69px'
-      $('#cpngs').animate
-        left: '100px'
-        top: '69px'
-      $('#buttons').animate
-        margin: '610px auto 0 440px'
-      if isPresenting
-        faye.publish Channel,
-          dtype: 'exit_full_screen'
-      else
-        $('#modal').animate
-          # 'z-index': 101
-          top: '44px'
-        $('#tools').animate
-          'z-index': 1001
-
-    fullScreen: ->
-      window.App.full_screen = true
-      $('#full_screen').removeClass('yes').addClass('no')
-      $('#tools').hide(1000)       
-      $('#pngs').animate
-        background: '#fff'
-        'z-index': 102
-        height: "100%"
-        width: '100%'
-        left: 0
-        top: 0
-      $('#prev').animate
-        left: '0px'
-      $('#next').animate
-        right: '0px'
-      $('#canvas').animate
-        'z-index': 103
-        left: '62px'
-        top: '74px'
-      $('#cpngs').animate
-        left: '62px'
-        top: '74px'
-      $('#buttons').animate
-        margin: '680 auto 0 500px'
-      if isPresenting
-        faye.publish Channel,
-          dtype: 'full_screen'
-      else
-        $('#modal').animate
-          'z-index': 1000
-          top: 0
 
     dispatch: ->
       # return
@@ -506,5 +433,18 @@ define ['backbone','jquery'], (Backbone, $) ->
       if window.isHost and publish
         faye.publish Channel,
           dtype: 'saveFileToDevice'
-
-
+    
+    setHost: (user_id) ->
+      # @alert 'now I am the host'
+      window.isHost = true
+      App.tool_helper.ctrlButtons().slideDown()
+      App.tool_helper.hostOnlyMenus().slideDown()
+      $('#apply_present').slideUp()
+      $('#follow_or_free').slideUp()
+    
+    stopHost: ->
+      window.isHost = false
+      App.tool_helper.ctrlButtons().slideUp()
+      App.tool_helper.hostOnlyMenus().slideUp()
+      $('#apply_present').slideDown()
+      $('#follow_or_free').slideDown()
